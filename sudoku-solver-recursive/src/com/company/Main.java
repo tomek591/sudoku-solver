@@ -28,11 +28,11 @@ public class Main {
             System.arraycopy(sudoku[i], 0, inputGrid[i], 0, sudoku[i].length);
 
         }
+
     }
 
 
     public static void displaySudoku(int[][] sudoku) {
-
         for (int[] matrix : sudoku) {
 
             System.out.println(Arrays.toString(matrix));
@@ -54,7 +54,6 @@ public class Main {
             do {
 
                 int rowNumber = i + 1;
-
                 isLengthNotValid = false;
                 isDataTypeNotValid = false;
 
@@ -266,6 +265,8 @@ public class Main {
                         } while (!isChangeable(inputGrid, x, y));
 
                         sudokuSolver(sudoku, inputGrid, x, y);
+
+                        break;
 
                     } else {  // validation failed
 
