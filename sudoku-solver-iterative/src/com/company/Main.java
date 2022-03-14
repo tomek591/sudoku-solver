@@ -7,25 +7,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        int[][] sudoku = new int[9][9];
+        int[][] sudoku = new int[9][9];
         int[][] inputGrid = new int[9][9];
 
-//        makeSudoku(sudoku);
-        int[][] sudoku = {
-                {0, 4, 9, 0, 3, 1, 0, 0, 0},
-                {0, 3, 0, 0, 7, 0, 9, 8, 0},
-                {8, 0, 0, 0, 4, 0, 0, 0, 0},
-                {0, 0, 6, 1, 5, 7, 8, 0, 2},
-                {0, 5, 0, 2, 8, 4, 1, 0, 6},
-                {0, 1, 0, 0, 0, 0, 0, 0, 5},
-                {0, 8, 5, 7, 0, 3, 4, 0, 9},
-                {0, 0, 2, 0, 0, 5, 3, 7, 0},
-                {0, 0, 4, 0, 2, 0, 5, 0, 1}
-        };
+        makeSudoku(sudoku);
 
         copyArray(sudoku, inputGrid);
 
-        //sudokuSolver(sudoku, inputGrid, 0, 0);
+        sudokuSolver(sudoku, inputGrid);
 
         displaySudoku(sudoku);
 
@@ -219,6 +208,116 @@ public class Main {
         }
 
         return true;
+
+    }
+
+    public static void sudokuSolver(int[][] sudoku, int[][] inputGrid) {
+
+        for ( int i = 0; i < sudoku.length; ) {
+
+            for (int j = 0; j < sudoku.length; ) {
+
+                if (isChangeable(inputGrid, i, j)) {
+
+                    if (sudoku[i][j] == 9) {
+
+                        sudoku[i][j] = 0;
+
+                        do {
+
+                            if (j == 0) {
+
+                                i--;
+                                j = 8;
+
+                            } else {
+
+                                j--;
+
+                            }
+                        } while (!isChangeable(inputGrid, i, j));
+
+                    } else {
+
+                        for (int k = sudoku[i][j] + 1; k < sudoku.length + 1; k++) {
+
+                            sudoku[i][j] = k;
+
+                            if (possibleValue(sudoku, i, j)) {
+
+                                do {
+
+                                    if (j == 8) {
+
+                                        if (i == 8) {
+
+                                            System.out.println("Result:");
+                                            displaySudoku(sudoku);
+                                            System.exit(0);
+
+                                        }
+
+                                        i++;
+                                        j = 0;
+
+                                    } else {
+
+                                        j++;
+
+                                    }
+                                } while (!isChangeable(inputGrid, i, j));
+
+                                break;
+
+                            } else {  // validation failed
+
+                                if (k == 9) {
+
+                                    sudoku[i][j] = 0;
+
+                                    do {
+
+                                        if (j == 0) {
+
+                                            i--;
+                                            j = 8;
+
+
+                                        } else {
+
+                                            j--;
+
+                                        }
+                                    } while (!isChangeable(inputGrid, i, j));
+
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                    j++;
+
+                }
+            }
+        }
+    }
+
+    private static boolean possibleValue(int[][] sudoku, int x, int y) {
+
+        if(!checkIfUniqueValuesInRow(sudoku, x)) return false;
+
+        if(!checkIfUniqueValuesInColumn(sudoku, y)) return false;
+
+        return checkIfUniqueValuesInSquare(sudoku, x / 3, y / 3);
+    }
+
+
+
+
+    private static boolean isChangeable(int[][] inputGrid, int x, int y) {
+
+        return inputGrid[x][y] == 0;
 
     }
 }
